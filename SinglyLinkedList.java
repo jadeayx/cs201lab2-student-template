@@ -101,7 +101,65 @@ public class SinglyLinkedList<E extends Comparable<E>> {
 
     // write your codes here
     public void swap(){
-        
+        int n = this.size();
+        ArrayList<E> arr = new ArrayList<>();
+        Node<E> curr = head;
+        while (curr != null) {
+            arr.add(curr.getElement());
+            curr = curr.getNext();
+        }
+        arr.sort(null);
+
+        System.out.println("arr: " + arr);
+
+        for (int i = 0; i < n / 2; i++) {
+        E smallest = arr.remove(0);
+        E largest = arr.remove(arr.size() - 1);
+
+        Node<E> big = head;
+        Node<E> prevB = null;
+        while (!big.getElement().equals(largest)) {
+            prevB = big;
+            big = big.getNext();
+        }
+
+        Node<E> small = head;
+        Node<E> prevS = null;
+        while (!small.getElement().equals(smallest)) {
+            prevS = small;
+            small = small.getNext();
+        }
+
+            if(big == small){
+                continue;
+            }
+
+            if(big.getNext() == small){
+                if(prevB == null) head = small; else prevB.setNext(small); 
+                big.setNext(small.getNext());
+                small.setNext(big);
+                if(big.getNext() == null) tail = big;
+            } else if(small.getNext() == big){
+                if(prevS == null) head = big; else prevS.setNext(big); 
+                small.setNext(big.getNext());
+                big.setNext(small);
+                if(small.getNext() == null) tail = small;
+            } else {
+                if(prevB == null) head = small; else prevB.setNext(small);
+                if(prevS == null) head = big; else prevS.setNext(big); 
+
+                Node<E> tempB = big.getNext();
+                Node<E> tempS = small.getNext();
+
+                big.setNext(tempS);
+                small.setNext(tempB);
+
+                if(big.getNext() == null) tail = big;
+                if(small.getNext() == null) tail = small;
+
+            }
+
+            }
 
     }
    
