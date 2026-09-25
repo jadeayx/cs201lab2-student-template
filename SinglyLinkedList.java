@@ -110,8 +110,6 @@ public class SinglyLinkedList<E extends Comparable<E>> {
         }
         arr.sort(null);
 
-        System.out.println("arr: " + arr);
-
         for (int i = 0; i < n / 2; i++) {
         E smallest = arr.remove(0);
         E largest = arr.remove(arr.size() - 1);
