@@ -101,64 +101,37 @@ public class SinglyLinkedList<E extends Comparable<E>> {
 
     // write your codes here
     public void swap(){
-        int n = this.size();
-        ArrayList<E> arr = new ArrayList<>();
+        int n = size();
+        if (n < 2) return;
+
+        ArrayList<Node<E>> nodes = new ArrayList<>(n);
         Node<E> curr = head;
         while (curr != null) {
-            arr.add(curr.getElement());
+            nodes.add(curr);
             curr = curr.getNext();
         }
-        arr.sort(null);
+
+        Integer[] order = new Integer[n];
+        for (int i = 0; i < n; i++) order[i] = i;
+        Arrays.sort(order, (a, b) -> nodes.get(a).getElement().compareTo(nodes.get(b).getElement()));
+
+        Node<E>[] newSeq = new Node[n];
+        for (int i = 0; i < n; i++) newSeq[i] = nodes.get(i);
 
         for (int i = 0; i < n / 2; i++) {
-        E smallest = arr.remove(0);
-        E largest = arr.remove(arr.size() - 1);
-
-        Node<E> big = head;
-        Node<E> prevB = null;
-        while (!big.getElement().equals(largest)) {
-            prevB = big;
-            big = big.getNext();
+            int posOfSmallest = order[i];
+            int posOfLargest  = order[n - 1 - i];
+            newSeq[posOfSmallest] = nodes.get(posOfLargest);
+            newSeq[posOfLargest]  = nodes.get(posOfSmallest);
         }
 
-        Node<E> small = head;
-        Node<E> prevS = null;
-        while (!small.getElement().equals(smallest)) {
-            prevS = small;
-            small = small.getNext();
+        for (int i = 0; i < n - 1; i++) {
+            newSeq[i].setNext(newSeq[i + 1]);
         }
+        newSeq[n - 1].setNext(null);
 
-            if(big == small){
-                continue;
-            }
-
-            if(big.getNext() == small){
-                if(prevB == null) head = small; else prevB.setNext(small); 
-                big.setNext(small.getNext());
-                small.setNext(big);
-                if(big.getNext() == null) tail = big;
-            } else if(small.getNext() == big){
-                if(prevS == null) head = big; else prevS.setNext(big); 
-                small.setNext(big.getNext());
-                big.setNext(small);
-                if(small.getNext() == null) tail = small;
-            } else {
-                if(prevB == null) head = small; else prevB.setNext(small);
-                if(prevS == null) head = big; else prevS.setNext(big); 
-
-                Node<E> tempB = big.getNext();
-                Node<E> tempS = small.getNext();
-
-                big.setNext(tempS);
-                small.setNext(tempB);
-
-                if(big.getNext() == null) tail = big;
-                if(small.getNext() == null) tail = small;
-
-            }
-
-            }
-
+        head = newSeq[0];
+        tail = newSeq[n - 1];
     }
    
 }
